@@ -1,9 +1,3 @@
-provider "aws" {
-	profile="default"
-	region="ap-south-1"
-		
-}
-
 #provisioning ec2 instance
 resource "aws_instance" "webserver" {
 	ami = "ami-0a4408457f9a03be3"
@@ -59,12 +53,16 @@ resource "aws_security_group" "allow_http_https" {
 	}
 }
 
+#create a eip
+resource "aws_eip" "webserver_eip" {}
+
 #provision an elastic ip to the ec2 instance
-resource "aws_eip_association" "webserver_eip" {
+resource "aws_eip_association" "webserver_eip_assoc" {
 	instance_id = aws_instance.webserver.id
-	allocation_id = "eipalloc-0472d6cc2118bac17"
+	allocation_id = aws_eip.webserver_eip.id
 }
 
-output "instance_ip"{
-	value=aws_instance.webserver.public_ip
-}
+#already defined in outputs.tf
+#output "instance_ip"{
+#	value=aws_instance.webserver.public_ip
+#}
