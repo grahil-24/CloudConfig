@@ -1,0 +1,5 @@
+- name: install apache/httpd
+  hosts: web_servers
+  become: true
+  roles: 
+    - web_server

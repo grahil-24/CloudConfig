@@ -1,0 +1,4 @@
+---
+# roles/apache/vars/Archlinux.yml
+apache_package_name: apache
+apache_service_name: httpd

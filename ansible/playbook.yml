@@ -1,0 +1,6 @@
+---
+- name: update amazon linux instance
+  hosts: web_servers
+  become: true
+  roles: 
+    - base
