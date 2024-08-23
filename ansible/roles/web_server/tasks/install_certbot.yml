@@ -1,0 +1,40 @@
+---
+- name: install dependency augeas-libs, mod_ssl
+  package:
+    name:
+      - augeas-libs
+      - mod_ssl
+    state: latest
+    
+- name: Check if Python virtual environment for Certbot exists
+  stat:
+    path: /opt/certbot/bin/activate
+  register: certbot_venv
+
+- name: Create a Python virtual environment for Certbot
+  command: python3 -m venv /opt/certbot/
+  when: not certbot_venv.stat.exists
+
+- name: Upgrade pip in the Certbot virtual environment
+  command: /opt/certbot/bin/pip install --upgrade pip
+  when: certbot_venv.stat.exists
+
+- name: Install Certbot and Certbot Apache plugin
+  pip:
+    name:
+      - certbot
+      - certbot-apache
+    virtualenv: /opt/certbot/
+
+- name: Create a symlink for Certbot
+  file:
+    src: /opt/certbot/bin/certbot
+    dest: /usr/bin/certbot
+    state: link
+
+- name: creating root directory for our site
+  file:
+    path: "{{ document_root }}"
+    state: directory
+    mode: '0755'
+
