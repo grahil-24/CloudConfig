@@ -1,0 +1,14 @@
+---
+- name: Copy apache virtual host configuration file
+  template: 
+    src: httpd.conf.j2
+    dest: /etc/httpd/conf.d/vhost.conf
+    owner: root
+    group: root
+    mode: '0644'
+  notify: Restart Apache
+
+- name: Generate TLS certificate with Certbot
+  ansible.builtin.command:
+    cmd: certbot --apache --non-interactive --agree-tos --email {{ certbot_register_email }} -d {{ server_name }}
+  notify: Restart Apache
