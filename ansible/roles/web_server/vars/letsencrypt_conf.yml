@@ -1,0 +1,5 @@
+server_name: www.shortenedurl.org
+server_alias: shortenedurl.org
+document_root: /var/www/site
+certbot_register_email: rahilganatra@email.com
+certbot_domain: www.shortenedurl.org
