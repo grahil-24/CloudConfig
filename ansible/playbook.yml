@@ -1,6 +1,29 @@
 ---
-- name: update amazon linux instance
-  hosts: web_servers
-  become: true
-  roles: 
-    - base
+- name: Run base and web server tasks
+  hosts: all
+  become: yes
+
+  roles:
+    - role: base
+      tags: base
+
+    - role: web_server
+      tags: web_server
+
+  tasks:
+    - name: Include main.yml from base role
+      include_tasks: "roles/base/tasks/main.yml"
+      tags: base
+
+    - name: Include main.yml from web_server role
+      include_tasks: "roles/web_server/tasks/main.yml"
+      tags: web_server
+
+    # - name: Install Certbot
+    #   include_tasks: "roles/web_server/tasks/install_certbot.yml"
+    #   tags: web_server
+
+    # - name: Generate Certificate 
+    #   include_tasks: "roles/web_server/tasks/install_certbot.yml"
+    #   tags: web_server
+
