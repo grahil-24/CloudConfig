@@ -1,5 +1,5 @@
 resource "aws_route53_zone" "main" {
-	name = "shortyurl.org"
+	name = "shortenedurl.org"
 }
 
 #fetching an already existing resource. so use data instead of resource
@@ -9,7 +9,7 @@ data "aws_eip" "webserver_eip" {
 
 resource "aws_route53_record" "record" {
 	zone_id = aws_route53_zone.main.zone_id
-	name = "shortyurl.org"
+	name = "www.shortenedurl.org"
 	# A stands for address. Address record. used to map domain to an IPv4 address. 
 	type = "A"
 	# time to live. caches the record for 300 sec. before querying the DNS again for updated info
