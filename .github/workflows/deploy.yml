@@ -1,0 +1,35 @@
+name: Deploy site
+
+# workflow triggered on push to the main branch, but when changes are made to only files inside the static folder
+on: 
+  push:
+    branches: 
+      - main
+    path: 
+      - 'static/**'
+
+# job named deploy to sync files on remote repo and /var/www/site on remote server
+jobs: 
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan www.shortenedurl.org >> ~/.ssh/known_hosts
+
+      - name: Sync files to server using rsync
+        run: |
+          rsync -avz --delete \
+          -e "ssh -o StrictHostKeyChecking=no" \
+          ./static/ ec2-user@www.shortenedurl.org:/var/www/site/
+
+      - name: Restart Apache
+        run: |
+          ssh -o StrictHostKeyChecking=no ec2-user@www.shortenedurl.org 'sudo systemctl restart httpd'
