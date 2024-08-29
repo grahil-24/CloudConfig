@@ -19,11 +19,11 @@
       include_tasks: "roles/web_server/tasks/main.yml"
       tags: web_server
 
-    # - name: Install Certbot
-    #   include_tasks: "roles/web_server/tasks/install_certbot.yml"
-    #   tags: web_server
+    - name: Install Certbot
+      include_tasks: "roles/web_server/tasks/install_certbot.yml"
+      tags: web_server
 
-    # - name: Generate Certificate 
-    #   include_tasks: "roles/web_server/tasks/install_certbot.yml"
-    #   tags: web_server
+    - name: Generate Certificate 
+      include_tasks: "roles/web_server/tasks/install_certbot.yml"
+      tags: web_server
 
